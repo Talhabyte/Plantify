@@ -1,0 +1,48 @@
+name: plantify
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  # Use a compatible Flutter SDK version for the newer packages
+  sdk: ">=3.0.0 <4.0.0" 
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Update to a stable, recent version of camera
+  camera: ^0.11.0 
+  # Update to a stable, recent version of image_picker
+  image_picker: ^1.1.2 
+  # Update to a stable, recent version of tflite_flutter
+  tflite_flutter: ^0.12.1 
+  image: ^4.2.0
+  # tflite_flutter_helper is discontinued and has been replaced by utilities within tflite_flutter itself.
+  # You will need to remove it and update your tflite_helper.dart logic.
+  # tflite_flutter_helper: ^0.3.1 
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Update flutter_lints to a modern version
+  flutter_lints: ^3.0.0 
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/models/plant_model_quant.tflite
+    - assets/models/labels.txt
+    - assets/images/splash_bg.png
+    - assets/images/welcome_bg.png
+    - assets/images/powderymildew.jpeg
+    - assets/images/powderymildew2.jpeg
+    - assets/images/leafspot.jpeg
+    - assets/images/Anthracnose.jpeg
+    - assets/images/bacterialblight.jpeg
+    - assets/images/rootrot.jpeg
+    - assets/images/RustDisease.jpeg
+    - assets/images/MosaicVirus.jpeg
+    - assets/images/downymildew.jpeg
