@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/route_names.dart';
+import '../../../../core/widgets/responsive_sizer.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final titleFont = size.width * 0.07;
-    final descFont = size.width * 0.045;
-    final buttonHeight = size.height * 0.07;
-    final buttonWidth = size.width * 0.8;
+    // Use the Sizer helper
+    final sizer = ResponsiveSizer(context);
+
+    final titleFont = sizer.w(0.07);
+    final descFont = sizer.fontText;
+    final buttonHeight = sizer.h(0.07);
+    final buttonWidth = sizer.w(0.8);
 
     return Scaffold(
       body: Stack(
@@ -48,11 +52,10 @@ class WelcomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: size.height * 0.02),
+                  SizedBox(height: sizer.spacingM),
                   // Description
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.width * 0.08),
+                    padding: EdgeInsets.symmetric(horizontal: sizer.w(0.08)),
                     child: Text(
                       "Scan leaves to identify diseases and get treatment recommendations",
                       textAlign: TextAlign.center,
@@ -69,10 +72,12 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: size.height * 0.05),
+                  SizedBox(height: sizer.h(0.05)),
                   // Buttons
                   ElevatedButton.icon(
-                    onPressed: () => Navigator.pushNamed(context, '/home'),
+                    // Use RouteNames constant
+                    onPressed: () =>
+                        Navigator.pushNamed(context, RouteNames.home),
                     icon: const Icon(Icons.camera_alt, color: Colors.white),
                     label: const Text("Scan Leaf",
                         style: TextStyle(color: Colors.white)),
@@ -85,9 +90,11 @@ class WelcomeScreen extends StatelessWidget {
                       elevation: 5,
                     ),
                   ),
-                  SizedBox(height: size.height * 0.02),
+                  SizedBox(height: sizer.spacingM),
                   ElevatedButton.icon(
-                    onPressed: () => Navigator.pushNamed(context, '/guide'),
+                    // Use RouteNames constant
+                    onPressed: () =>
+                        Navigator.pushNamed(context, RouteNames.guide),
                     icon: const Icon(Icons.book, color: Color(0xff2F6030)),
                     label: const Text("View Disease Guide",
                         style: TextStyle(color: Color(0xff2F6030))),
@@ -105,7 +112,7 @@ class WelcomeScreen extends StatelessWidget {
           ),
           // Footer
           Positioned(
-            bottom: size.height * 0.02,
+            bottom: sizer.spacingM,
             left: 0,
             right: 0,
             child: Center(
@@ -113,7 +120,7 @@ class WelcomeScreen extends StatelessWidget {
                 "© 2023 PlantHealth - All rights reserved",
                 style: TextStyle(
                   color: Colors.white70,
-                  fontSize: size.width * 0.03,
+                  fontSize: sizer.w(0.03),
                 ),
               ),
             ),

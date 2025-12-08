@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/app_colors.dart';
 
-class DiseaseResultScreen extends StatelessWidget {
-  const DiseaseResultScreen({super.key});
+class TreatmentLogic {
+  // Private constructor to make this class static utility
+  TreatmentLogic._();
 
-  String getSeverityFromLabel(String label) {
+  static String getSeverityFromLabel(String label) {
     final lowerLabel = label.toLowerCase().trim();
 
     const lowSeverity = [
@@ -53,30 +55,33 @@ class DiseaseResultScreen extends StatelessWidget {
       "tomato___spider_mites two-spotted_spider_mite",
     ];
 
-    if (lowSeverity.map((e) => e.toLowerCase()).contains(lowerLabel))
+    if (lowSeverity.map((e) => e.toLowerCase()).contains(lowerLabel)) {
       return "Low";
-    if (moderateSeverity.map((e) => e.toLowerCase()).contains(lowerLabel))
+    }
+    if (moderateSeverity.map((e) => e.toLowerCase()).contains(lowerLabel)) {
       return "Moderate";
-    if (highSeverity.map((e) => e.toLowerCase()).contains(lowerLabel))
+    }
+    if (highSeverity.map((e) => e.toLowerCase()).contains(lowerLabel)) {
       return "High";
+    }
 
     return "Moderate";
   }
 
-  Color getSeverityColor(String severity) {
+  static Color getSeverityColor(String severity) {
     switch (severity) {
       case "Low":
-        return Colors.green;
+        return AppColors.severityLow;
       case "Moderate":
-        return Colors.orange;
+        return AppColors.severityModerate;
       case "High":
-        return Colors.red;
+        return AppColors.severityHigh;
       default:
         return Colors.grey;
     }
   }
 
-  List<String> getTreatmentSteps(String label) {
+  static List<String> getTreatmentSteps(String label) {
     final normalizedLabel = label.toLowerCase().trim();
     switch (normalizedLabel) {
       case "apple___apple_scab":
@@ -296,170 +301,18 @@ class DiseaseResultScreen extends StatelessWidget {
           "Inspect plants for early signs of disease",
           "Keep the area clean from debris"
         ];
-      case "soybean___healthy": // ✅ ADD THIS
+      case "soybean___healthy":
         return [
           "Maintain proper watering and nutrition",
           "Inspect for pests and disease regularly",
           "Keep the field clean and remove weeds"
         ];
       default:
-        // ... (same as your previous getTreatmentSteps mapping)
         return [
           "Follow general care: improve ventilation and avoid overwatering",
           "Inspect plants regularly",
           "Keep tools and surroundings clean"
         ];
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final String label = data["label"];
-    final double confidence = data["confidence"];
-
-    final severity = getSeverityFromLabel(label);
-    final severityColor = getSeverityColor(severity);
-    final treatmentSteps = getTreatmentSteps(label);
-
-    final size = MediaQuery.of(context).size;
-    final titleFont = size.width * 0.055;
-    final textFont = size.width * 0.045;
-    final spacing = size.height * 0.015;
-    final buttonHeight = size.height * 0.065;
-
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        centerTitle: true,
-        title: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.eco_outlined,
-              size: size.width * 0.1, color: const Color(0xff387939)),
-          SizedBox(width: size.width * 0.02),
-          Text("Disease Result",
-              style: TextStyle(
-                  color: const Color(0xff284C29), fontSize: titleFont)),
-        ]),
-        backgroundColor: Colors.white,
-        elevation: 2,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(size.width * 0.04),
-        child: Column(
-          children: [
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(size.width * 0.03)),
-              elevation: 4,
-              child: Padding(
-                padding: EdgeInsets.all(size.width * 0.04),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(label.replaceAll('_', ' '),
-                        style: TextStyle(
-                            fontSize: titleFont,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xff284C29))),
-                    SizedBox(height: spacing),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Confidence",
-                            style: TextStyle(color: Color(0xff1E3B1F))),
-                        Text("${confidence.toStringAsFixed(1)}%"),
-                      ],
-                    ),
-                    SizedBox(height: spacing / 3),
-                    LinearProgressIndicator(
-                        value: confidence / 100,
-                        color: const Color(0xff387939),
-                        backgroundColor: Colors.grey[300],
-                        minHeight: spacing / 2),
-                    SizedBox(height: spacing),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text("Low"),
-                          Text("Medium"),
-                          Text("High")
-                        ]),
-                    SizedBox(height: spacing / 3),
-                    Text("Severity",
-                        style: const TextStyle(color: Color(0xff1E3B1F))),
-                    SizedBox(height: spacing / 3),
-                    SizedBox(
-                      width: double.infinity,
-                      child: LinearProgressIndicator(
-                        value: severity == "Low"
-                            ? 0.33
-                            : severity == "Moderate"
-                                ? 0.66
-                                : 1.0,
-                        color: severityColor,
-                        backgroundColor: Colors.grey[300],
-                        minHeight: spacing / 2,
-                      ),
-                    ),
-                    SizedBox(height: spacing),
-                    Text("Treatment Recommendations",
-                        style: TextStyle(
-                            fontSize: textFont,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xff284C29))),
-                    SizedBox(height: spacing / 2),
-                    ...treatmentSteps.asMap().entries.map((entry) {
-                      int idx = entry.key + 1;
-                      String step = entry.value;
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: spacing / 3),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: size.width * 0.03,
-                              backgroundColor: const Color(0xffDCF0DC),
-                              child: Text("$idx",
-                                  style: TextStyle(
-                                      color: const Color(0xff284C29),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: textFont * 0.6)),
-                            ),
-                            SizedBox(width: size.width * 0.02),
-                            Expanded(
-                                child: Text(step,
-                                    style: TextStyle(
-                                        fontSize: textFont,
-                                        color: const Color(0xff374151)))),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ),
-            Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: buttonHeight,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
-                label: const Text("Scan Again",
-                    style: TextStyle(color: Colors.white)),
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, '/home'),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff387939),
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(size.width * 0.03))),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

@@ -121,7 +121,7 @@ class TFLiteHelper {
 
     // Get max probability
     // Now, process the list to get max probability.
-    // We no longer need the `.map().toList()` part since outputList is already List<double>
+    // We no longer need the .map().toList() part since outputList is already List<double>
     // and already contains the probabilities.
 
     // Get max probability

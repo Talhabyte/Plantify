@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/route_names.dart';
+import '../../../../core/widgets/responsive_sizer.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,15 +15,17 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/welcome');
+      // Use RouteNames constant
+      Navigator.pushReplacementNamed(context, RouteNames.welcome);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final iconSize = size.width * 0.18; // responsive icon
-    final fontSize = size.width * 0.09; // responsive text
+    // Use the Sizer helper
+    final sizer = ResponsiveSizer(context);
+    final iconSize = sizer.iconXL;
+    final fontSize = sizer.w(0.09); // Keep original large font size
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,8 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           Center(
             child: Padding(
-              padding: EdgeInsets.only(
-                  left: size.width * 0.25, top: size.height * 0.1),
+              padding: EdgeInsets.only(left: sizer.w(0.25), top: sizer.h(0.1)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -45,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     size: iconSize,
                     color: const Color(0xFF387939),
                   ),
-                  SizedBox(width: size.width * 0.02),
+                  SizedBox(width: sizer.w(0.02)),
                   Text(
                     "Plantify",
                     style: TextStyle(
